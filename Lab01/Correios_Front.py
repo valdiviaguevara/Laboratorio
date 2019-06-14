@@ -1,33 +1,57 @@
-# Print iterations progress
-def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█'):
-    """
-    Call in a loop to create terminal progress bar
-    @params:
-        iteration   - Required  : current iteration (Int)
-        total       - Required  : total iterations (Int)
-        prefix      - Optional  : prefix string (Str)
-        suffix      - Optional  : suffix string (Str)
-        decimals    - Optional  : positive number of decimals in percent complete (Int)
-        length      - Optional  : character length of bar (Int)
-        fill        - Optional  : bar fill character (Str)
-    """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-    filledLength = int(length * iteration // total)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
-    # Print New Line on Complete
-    if iteration == total:
-        print()
-from time import sleep
+import curses
+screen = curses.initscr()
+curses.noecho()
+curses.cbreak()
+curses.start_color()
+screen.keypad( 1 )    # delete this line
+curses.init_pair(1,curses.COLOR_BLACK, curses.COLOR_CYAN)
+highlightText = curses.color_pair( 1 )
+normalText = curses.A_NORMAL
+screen.border( 0 )
+curses.curs_set( 0 )
+box = curses.newwin( 22, 64, 1, 1 )
+box.keypad( 1 )
+box.box()
+box.addstr( 5, 3, "YOU HAVE PRESSED: ")
 
-# A List of Items
-items = list(range(0, 57))
-l = len(items)
+screen.refresh()    # delete this line
+box.refresh()
 
-# Initial call to print 0% progress
-printProgressBar(0, l, prefix = 'Progress:', suffix = 'Complete', length = 50)
-for i, item in enumerate(items):
-    # Do stuff...
-    sleep(0.1)
-    # Update Progress Bar
-    printProgressBar(i + 1, l, prefix = 'Progress:', suffix = 'Complete', length = 50)
+x = box.getch()
+letra=''
+while  (x>=97 and x<=122) or(x>=48 and x<=57):
+    box.erase()
+    letra=letra+chr(x)
+    box.addstr( 5, 3, "YOU HAVE PRESSED: " + str(x) )
+    box.addstr( 6, 4, "YOU HAVE PRESSED: " + str(letra) )
+    screen.border( 0 )
+    box.border( 0 )
+    screen.refresh()  # delete this line
+    box.refresh()     # delete this line
+    x = box.getch()
+
+curses.endwin()
+exit()
+
+
+
+
+
+
+import curses
+from curses.textpad import Textbox, rectangle
+stdscr = curses.initscr()
+def main(stdscr,Numero_Linhas):
+    stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+    editwin = curses.newwin(Numero_Linhas,30, 2,1)
+    rectangle(stdscr, 1,0, 1+Numero_Linhas+1, 1+30+1)
+    stdscr.refresh()
+    box = Textbox(editwin)
+    # Let the user edit until Ctrl-G is struck.
+    box.edit([Control-A,Control-B])
+    # Get resulting contents
+    message = box.gather()
+    return message
+Numero_Linhas=1
+Contenido=main(stdscr,Numero_Linhas)
+print (Contenido)
